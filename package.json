@@ -1,0 +1,24 @@
+{
+  "name": "blue-ocean-db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "psql postgres -f schema.sql",
+    "populate": "node testBooks.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Andes-Book-Club/blue-ocean-db.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Andes-Book-Club/blue-ocean-db/issues"
+  },
+  "homepage": "https://github.com/Andes-Book-Club/blue-ocean-db#readme",
+  "dependencies": {
+    "pg": "^8.6.0"
+  }
+}
