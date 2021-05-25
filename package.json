@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Andes-Book-Club/blue-ocean-db#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "pg": "^8.6.0"
   }
 }
