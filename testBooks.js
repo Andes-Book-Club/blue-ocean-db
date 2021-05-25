@@ -81,11 +81,18 @@ function insertUser(fName, lName) {
       '${lName}',
       'Book ${fName.substring(0,3) + lName.substring(-3)}',
       '${fName}.jpg'
-      )`
+      )
+    ON CONFLICT DO NOTHING;`
   );
 }
 
-insertUser('James', 'Jameson');
+insertUser('Al', 'Alberts');
+insertUser('Burt', 'Brooks');
+insertUser('Curtis', 'Calloway');
+insertUser('Don', 'Deere');
+insertUser('Everett', 'Elm');
+insertUser('Fran', 'Finch');
+insertUser('George', 'Gregg');
 insertBook('cyberiad');
 insertBook('a gentleman in moscow');
 insertBook('to kill a mockingbird');
@@ -93,63 +100,10 @@ insertBook('mycellium running');
 insertBook('mistborn');
 insertBook('overstory');
 insertBook('flowers for algernon');
-=======
-//test query for users table
-// will be stored / retrieved as result of user login
-const insertUser = db.query(`
-  INSERT INTO
-    users (
-      email,
-      firstName,
-      lastName,
-      profileName,
-      profilePhoto
-      )
-  VALUES (
-    'akdshfjhadsf',
-    'Bob',
-    'Bobbington',
-    'BobbityBoo',
-    'bobsPic@bob.bob'
-  )`
-);
-// insertBook --> result of
-const insertBook = db.query(`
-  INSERT INTO
-    books (
-      bookId,
-      title,
-      publisher,
-      searchInfo,
-      pageCount,
-      maturityRating,
-      thumbnail,
-      buyLink
-      )
-  VALUES (
-    '0351VlMDqGEC',
-    'Being And Time',
-    'SUNY Books',
-    'What is the meaning of being?&quot; This is the central question of Martin Heidegger&#39;s profoundly important work, in which the great philosopher seeks to explain the basic problems of existence.',
-    608,
-    'NOT_MATURE',
-    'http://books.google.com/books/content?id=9oc2BnZMCZgC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api',
-    'https://play.google.com/store/books/details?id=ZWDdDwAAQBAJ&rdid=book-ZWDdDwAAQBAJ&rdot=1&source=gbs_api'
-  )`
-);
 
-const insertAuthor = db.query(`
-  INSERT INTO
-    authors (
-      authorName
-      )
-  VALUES (
-    'Martin Heidegger'
-  )`
-);
-
-const insertQuestion = db.query(`
-  INSERT INTO
+function insertQuestion(userId, upvotes, downvotes, questionBody, answer1, answer2, answer3, answer4, correctAnswer, bookId) {
+  return db.query(`
+    INSERT INTO
     questions (
       createdBy,
       upvotes,
@@ -159,33 +113,55 @@ const insertQuestion = db.query(`
       answer2,
       answer3,
       answer4,
-      correctAnswer
-  )
-  VALUES (
-    1,
-    0,
-    3,
-    'What does Heidegger describe as: Being there. Beings for which being is an issue and is mine.',
-    'Heidegger was a nut',
-    'Kafka ftw',
-    'Dasein',
-    'Being in Time',
-    3
-  )`
-);
+      correctAnswer,
+      bookId
+    )
+    VALUES (
+      ${userId},
+      ${upvotes},
+      ${downvotes},
+      $$${questionBody}$$,
+      $$${answer1}$$,
+      $$${answer2}$$,
+      $$${answer3}$$,
+      $$${answer4}$$,
+      ${correctAnswer},
+      $$${bookId}$$
+    )`
+  );
+}
+setTimeout( () => {
 
-const insertUserQuestion = db.query(`
-  INSERT INTO
-    userQuestions (
-      userId,
-      questionId,
-      isCorrect,
-      userRating
+  insertQuestion(1, 0, 3, 'Where did the chicken go?', 'Down', 'Up', 'Across the road', 'Vertical', 3, 'qtsTH7ekvVYC');
+  insertQuestion(2, 4, 2, 'What is the stipe of the mushroom?', 'The Teeth', 'The Mycelium', 'The Mycorhizae', 'The stalk', 4, 'qtsTH7ekvVYC');
+  insertQuestion(3, 0, 3, 'What is the largest organizm in the world?', 'Whale', 'Mushroom', 'Extinct Shark', 'Vertical', 2, 'qtsTH7ekvVYC');
+
+}, 1000);
+
+function insertUserQuestions(userId, questionId, isCorrect, selectedAnswer, userRating) {
+  return db.query(`
+    INSERT INTO
+    userAnswers (
+        userId,
+        questionId,
+        isCorrect,
+        selectedAnswer,
+        userRating
+      )
+    VALUES (
+      ${userId},
+      ${questionId},
+      ${isCorrect},
+      ${selectedAnswer},
+      ${userRating}
+    )`
   )
-  VALUES (
-    1,
-    4,
-    true,
-    1
-  )`
-);
+}
+
+setTimeout( () => {
+
+  insertUserQuestions(1, 1, false, 2, 1);
+  insertUserQuestions(2, 2, false, 2, -1);
+  insertUserQuestions(3, 3, true, 2, 1);
+
+}, 2000);

@@ -29,7 +29,7 @@ CREATE TABLE bookCategories (
 
 create TABLE users (
   userId SERIAL PRIMARY KEY,
-  email varchar(200),
+  email varchar(200) UNIQUE,
   firstName varchar(40),
   lastName varchar(40),
   profileName varchar(40),
@@ -62,14 +62,15 @@ CREATE TABLE userBooks (
   PRIMARY KEY (userId, bookId)
 );
 
-CREATE TABLE userQuestions (
+CREATE TABLE userAnswers (
+  userAnswerId SERIAL PRIMARY KEY,
   userId int references users(userID),
   questionId int references questions(questionId),
   answeredAt TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   isCorrect boolean,
-  userRating int,
-  CHECK (userRating BETWEEN -1 AND 1),
-  PRIMARY KEY (userId, questionId)
+  selectedAnswer int,
+  userRating int DEFAULT 0,
+  CHECK (userRating BETWEEN -1 AND 1)
 );
 
 CREATE INDEX ON books (bookId);
@@ -79,4 +80,4 @@ CREATE INDEX ON users (userId);
 CREATE INDEX ON users (email);
 CREATE INDEX ON questions (questionId);
 CREATE INDEX ON userBooks (userId);
-CREATE INDEX ON userQuestions (userId);
+CREATE INDEX ON userAnswers (userId, questionId);
