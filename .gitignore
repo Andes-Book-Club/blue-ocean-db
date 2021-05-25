@@ -45,5 +45,4 @@ typings/
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
-# package-lock
 package-lock.json
