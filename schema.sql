@@ -39,7 +39,7 @@ CREATE TABLE bookCategories (
 
 create TABLE users (
   userId SERIAL PRIMARY KEY,
-  googleId varchar(200),
+  email varchar(200),
   firstName varchar(40),
   lastName varchar(40),
   profileName varchar(40),
@@ -87,7 +87,7 @@ CREATE INDEX ON authorsBooks (id);
 CREATE INDEX ON categories (categoryId);
 CREATE INDEX ON bookCategories (id);
 CREATE INDEX ON users (userId);
-CREATE INDEX ON users (googleId);
+CREATE INDEX ON users (email);
 CREATE INDEX ON questions (questionId);
 CREATE INDEX ON userBooks (userId);
 CREATE INDEX ON userQuestions (id);
