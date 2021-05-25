@@ -8,38 +8,28 @@ CREATE TABLE books (
   bookId varchar(30) PRIMARY KEY,
   title varchar(200),
   publisher varchar(100),
-  searchInfo varchar(200),
+  searchInfo varchar(1000),
   pageCount int,
   maturityRating matRates,
   thumbnail varchar(1000),
-  buyLink varchar(1000)
-);
-
-CREATE TABLE authors (
-  authorId SERIAL PRIMARY KEY,
-  authorName varchar(100)
+  buyLink varchar(1000) DEFAULT NULL
 );
 
 CREATE TABLE authorsBooks (
-  id SERIAL PRIMARY KEY,
-  authorId int references authors(authorId),
-  bookId varchar(30) references books(bookId)
-);
-
-CREATE TABLE categories (
-  categoryId SERIAL PRIMARY KEY,
-  categoryName varchar(100)
+  authorName varchar(100),
+  bookId varchar(30) references books(bookId),
+  PRIMARY KEY (authorName, bookId)
 );
 
 CREATE TABLE bookCategories (
-  id SERIAL PRIMARY KEY,
-  categoryId int references categories(categoryId),
-  bookId varchar(30) references books(bookId)
+  categoryName varchar(100),
+  bookId varchar(30) references books(bookId),
+  PRIMARY KEY (categoryName, bookId)
 );
 
 create TABLE users (
   userId SERIAL PRIMARY KEY,
-  googleId varchar(200),
+  email varchar(200),
   firstName varchar(40),
   lastName varchar(40),
   profileName varchar(40),
@@ -65,29 +55,28 @@ CREATE TABLE questions (
 );
 
 CREATE TABLE userBooks (
-  id SERIAL PRIMARY KEY,
   userId int references users(userID),
   bookId varchar(30) references books(bookId),
-  addedAt TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  addedAt TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  isCompleted boolean DEFAULT false,
+  PRIMARY KEY (userId, bookId)
 );
 
 CREATE TABLE userQuestions (
-  id SERIAL PRIMARY KEY,
   userId int references users(userID),
   questionId int references questions(questionId),
   answeredAt TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   isCorrect boolean,
   userRating int,
-  CHECK (userRating BETWEEN -1 AND 1)
+  CHECK (userRating BETWEEN -1 AND 1),
+  PRIMARY KEY (userId, questionId)
 );
 
 CREATE INDEX ON books (bookId);
-CREATE INDEX ON authors (authorId);
-CREATE INDEX ON authorsBooks (id);
-CREATE INDEX ON categories (categoryId);
-CREATE INDEX ON bookCategories (id);
+CREATE INDEX ON authorsBooks (bookId);
+CREATE INDEX ON bookCategories (bookId);
 CREATE INDEX ON users (userId);
-CREATE INDEX ON users (googleId);
+CREATE INDEX ON users (email);
 CREATE INDEX ON questions (questionId);
 CREATE INDEX ON userBooks (userId);
-CREATE INDEX ON userQuestions (id);
+CREATE INDEX ON userQuestions (userId);
