@@ -49,7 +49,7 @@ CREATE TABLE questions (
   answer4 varchar(200),
   correctAnswer int,
   CHECK (correctAnswer BETWEEN 1 AND 4),
-  relevance NUMERIC GENERATED ALWAYS AS (upvotes / downvotes) STORED,
+  relevance NUMERIC GENERATED ALWAYS AS (upvotes - downvotes) STORED,
   bookId varchar(30) references books(bookId),
   isReported boolean NOT NULL DEFAULT false
 );
